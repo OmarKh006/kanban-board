@@ -3,20 +3,13 @@ import { useState } from "react";
 import DialogPrimitive from "./DialogPrimitive";
 import iconBoard from "@assets/icon-board.svg";
 
-const DATA = [
-  { title: "Home", id: "1" },
-  { title: "About", id: "2" },
-  { title: "Contact", id: "3" },
-];
-
-const SideMenu = () => {
-  const [selectedBoardIndex, setSelectedBoardIndex] = useState(0);
+const SideMenu = ({ data = [], selectedBoardIndex, setSelectedBoardIndex }) => {
   const [open, setOpen] = useState(false);
   return (
     <aside className="side-menu border-lines-light -mt-px w-75 border-r bg-white">
-      <p className="text-heading-s px-8 py-4">All Boards ({DATA.length})</p>
+      <p className="text-heading-s px-8 py-4">All Boards ({data.length})</p>
       <ul>
-        {DATA.map((item, index) => {
+        {data.map((item, index) => {
           return (
             <li key={item.id}>
               <button
