@@ -1,4 +1,5 @@
-import Button from "./components/Button/Button";
+import Button from "./components/Button";
+import TextField from "./components/TextField";
 
 function App() {
   return (
@@ -6,6 +7,7 @@ function App() {
       <Button variant="destructive" size="lg">
         Hello World!
       </Button>
+      <TextField placeholder={"test"} />
     </h1>
   );
 }
