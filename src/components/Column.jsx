@@ -1,5 +1,12 @@
 import Card from "./Card";
 
+/**
+ * @param {Object} props
+ * @param {Array} props.tasks - An array of task objects, each containing an id and title.
+ * @param {string} props.title - The title of the column.
+ * @returns {JSX.Element} A React component that renders a column with a list of tasks and a button to add a new task.
+ */
+
 const Column = ({ tasks = [], title }) => {
   return (
     <div className="bg-lines-light flex w-72 shrink-0 flex-col self-start rounded-lg px-2 shadow">

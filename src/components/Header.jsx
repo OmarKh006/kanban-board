@@ -3,6 +3,10 @@ import DropdownPrimitive from "./DropdownPrimitive";
 import iconVerticalEllipsis from "@assets/icon-vertical-ellipsis.svg";
 import DialogPrimitive from "./DialogPrimitive";
 
+/**
+ * @returns {JSX.Element} A React component that renders the header of the application, including the title and a dropdown menu for editing or deleting the current board.
+ */
+
 const Header = () => {
   const [open, setOpen] = useState(false);
 

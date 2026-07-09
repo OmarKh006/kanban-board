@@ -3,6 +3,15 @@ import { useState } from "react";
 import DialogPrimitive from "./DialogPrimitive";
 import iconBoard from "@assets/icon-board.svg";
 
+/**
+ *
+ * @param {Object} props
+ * @param {Array} props.data - An array of board objects, each containing an id and title.
+ * @param {number} props.selectedBoardIndex - The index of the currently selected board.
+ * @param {Function} props.setSelectedBoardIndex - A function to update the selected board index.
+ * @returns {JSX.Element} A React component that renders a side menu with a list of boards and a button to create a new board.
+ */
+
 const SideMenu = ({ data = [], selectedBoardIndex, setSelectedBoardIndex }) => {
   const [open, setOpen] = useState(false);
   return (
