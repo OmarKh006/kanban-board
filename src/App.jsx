@@ -1,5 +1,6 @@
 import Header from "./components/Header";
 import SideMenu from "./components/SideMenu";
+import Workspace from "./components/Workspace";
 
 function App() {
   return (
@@ -7,6 +8,7 @@ function App() {
       <Header />
       <div className="flex flex-1">
         <SideMenu />
+        <Workspace />
       </div>
     </div>
   );
