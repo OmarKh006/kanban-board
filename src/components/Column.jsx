@@ -11,7 +11,7 @@ import { produce } from "immer";
  * @returns {JSX.Element} A React component that renders a column with a list of tasks and a button to add a new task.
  */
 
-const Column = ({ id, tasks = [], title }) => {
+const Column = ({ id, tasks = [], title, columnIndex }) => {
   const { selectedBoardIndex, data, setData } = useContext(DataContext);
 
   const createNewTaskObject = () => ({ id: Date.now(), title: "New Task" });
@@ -65,12 +65,14 @@ const Column = ({ id, tasks = [], title }) => {
         </button>
       </h2>
       <div className="mb-5 flex flex-col gap-5">
-        {tasks.map((task) => (
+        {tasks.map((task, index) => (
           <Card
             key={task.id}
             title={task.title}
             cardId={task.id}
             columnId={id}
+            cardIndex={index}
+            columnIndex={columnIndex}
           />
         ))}
       </div>
