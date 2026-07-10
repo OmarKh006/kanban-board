@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import Column from "./Column";
 import { DataContext } from "@/DataContext";
+import { produce } from "immer";
 
 const Workspace = () => {
   const { data, selectedBoardIndex, setData } = useContext(DataContext);
@@ -8,19 +9,13 @@ const Workspace = () => {
 
   const addNewColumnHandler = () => {
     setData((prev) => {
-      const newData = [...prev];
-      newData[selectedBoardIndex] = {
-        ...newData[selectedBoardIndex],
-        columns: [
-          ...newData[selectedBoardIndex].columns,
-          {
-            id: Date.now(),
-            title: "New Column",
-            tasks: [],
-          },
-        ],
-      };
-      return newData;
+      return produce(prev, (draft) => {
+        draft[selectedBoardIndex].columns.push({
+          id: Date.now(),
+          title: "New Column",
+          tasks: [],
+        });
+      });
     });
   };
 
