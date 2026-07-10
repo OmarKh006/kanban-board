@@ -4,9 +4,14 @@ import TextField from "./TextField";
 import iconCross from "@assets/icon-cross.svg";
 import { DataContext } from "@/DataContext";
 
-const NewBoardForm = ({ boardId, toggleDialogue }) => {
+const NewBoardForm = ({
+  boardId,
+  toggleDialogue,
+  title,
+  columns = () => [{ id: Date.now() }],
+}) => {
   const { setData, setSelectedBoardIndex } = useContext(DataContext);
-  const [columnsArray, setColumnsArray] = useState(() => [{ id: Date.now() }]);
+  const [columnsArray, setColumnsArray] = useState(columns);
 
   const removeColumnHandler = (index) => {
     setColumnsArray((prev) => prev.filter((_, idx) => idx !== index));
@@ -16,27 +21,43 @@ const NewBoardForm = ({ boardId, toggleDialogue }) => {
     setColumnsArray((prev) => [...prev, { id: Date.now() }]);
   };
 
-  const createNewColumnsArray = (formData, columnsArray) => {
+  const createNewColumnsArray = (formData, columnsArray, boardId) => {
+    const tasksArray = boardId ? columnsArray.tasks : [];
     return columnsArray.map((column) => {
       return {
         id: column.id,
         title: formData.get(column.id),
-        tasks: [],
+        tasks: tasksArray,
       };
     });
   };
 
-  const updateData = (boardName, newColumnsArray, setData) => {
+  const updateData = (boardName, newColumnsArray, setData, boardId) => {
     setData((prev) => {
-      setSelectedBoardIndex(prev.length);
-      return [
-        ...prev,
-        {
-          id: Date.now(),
-          title: boardName,
-          columns: newColumnsArray,
-        },
-      ];
+      let newData;
+      if (boardId) {
+        newData = prev.map((item) => {
+          if (item.id === boardId) {
+            return {
+              ...item,
+              title: boardName,
+              columns: newColumnsArray,
+            };
+          }
+          return item;
+        });
+      } else {
+        newData = [
+          ...prev,
+          {
+            id: Date.now(),
+            title: boardName,
+            columns: newColumnsArray,
+          },
+        ];
+        setSelectedBoardIndex(prev.length);
+      }
+      return newData;
     });
   };
 
@@ -49,7 +70,7 @@ const NewBoardForm = ({ boardId, toggleDialogue }) => {
       columnsArray,
       boardId,
     );
-    updateData(boardName, newColumnsArray, setData);
+    updateData(boardName, newColumnsArray, setData, boardId);
     toggleDialogue(false);
   };
 
@@ -57,7 +78,12 @@ const NewBoardForm = ({ boardId, toggleDialogue }) => {
     <form onSubmit={handleFormSubmit}>
       <div>
         <h3 className="text-body-m text-medium-grey pt-6 pb-2">Name</h3>
-        <TextField placeholder="e.g. Web Design" name="boardName" required />
+        <TextField
+          placeholder="e.g. Web Design"
+          name="boardName"
+          defaultValue={title}
+          required
+        />
       </div>
       <div className="flex flex-col gap-2">
         <h3 className="text-body-m text-medium-grey pt-6">Columns</h3>
@@ -85,7 +111,7 @@ const NewBoardForm = ({ boardId, toggleDialogue }) => {
       </div>
       <div className="mt-6">
         <Button type="submit" variant="primary" size="sm" isFullWidth>
-          Create New Board
+          {boardId ? "Update" : "Create New"} Board
         </Button>
       </div>
     </form>

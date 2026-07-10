@@ -3,6 +3,7 @@ import DropdownPrimitive from "./DropdownPrimitive";
 import iconVerticalEllipsis from "@assets/icon-vertical-ellipsis.svg";
 import DialogPrimitive from "./DialogPrimitive";
 import { DataContext } from "@/DataContext";
+import NewBoardForm from "./NewBoardForm";
 
 /**
  * @returns {JSX.Element} A React component that renders the header of the application, including the title and a dropdown menu for editing or deleting the current board.
@@ -10,7 +11,7 @@ import { DataContext } from "@/DataContext";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
-  const { setData, selectedBoardIndex } = useContext(DataContext);
+  const { data, setData, selectedBoardIndex } = useContext(DataContext);
 
   const onEditBoard = () => setOpen(true);
 
@@ -42,7 +43,12 @@ const Header = () => {
           )}
         />
         <DialogPrimitive isOpen={open} setOpen={setOpen} title="Edit Board">
-          Hello
+          <NewBoardForm
+            toggleDialogue={setOpen}
+            boardId={data[selectedBoardIndex]?.id}
+            columns={data[selectedBoardIndex]?.columns}
+            title={data[selectedBoardIndex]?.title}
+          />
         </DialogPrimitive>
       </div>
     </header>
