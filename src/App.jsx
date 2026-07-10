@@ -8,14 +8,18 @@ function App() {
   const [dataState, setDataState] = useState([]);
   const [selectedBoardIndex, setSelectedBoardIndex] = useState(0);
   return (
-    <DataContext.Provider value={{ data: dataState, setData: setDataState }}>
+    <DataContext.Provider
+      value={{
+        data: dataState,
+        setData: setDataState,
+        selectedBoardIndex,
+        setSelectedBoardIndex,
+      }}
+    >
       <div className="flex h-screen flex-col text-3xl">
         <Header />
         <div className="flex flex-1">
-          <SideMenu
-            selectedBoardIndex={selectedBoardIndex}
-            setSelectedBoardIndex={setSelectedBoardIndex}
-          />
+          <SideMenu />
           <Workspace columns={dataState[selectedBoardIndex]?.columns} />
         </div>
       </div>

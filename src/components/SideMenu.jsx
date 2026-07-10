@@ -7,15 +7,13 @@ import NewBoardForm from "./NewBoardForm";
 
 /**
  *
- * @param {Object} props
- * @param {number} props.selectedBoardIndex - The index of the currently selected board.
- * @param {Function} props.setSelectedBoardIndex - A function to update the selected board index.
  * @returns {JSX.Element} A React component that renders a side menu with a list of boards and a button to create a new board.
  */
 
-const SideMenu = ({ selectedBoardIndex, setSelectedBoardIndex }) => {
+const SideMenu = () => {
   const [open, setOpen] = useState(false);
-  const { data } = useContext(DataContext);
+  const { data, selectedBoardIndex, setSelectedBoardIndex } =
+    useContext(DataContext);
   return (
     <aside className="side-menu border-lines-light -mt-px w-75 border-r bg-white">
       <p className="text-heading-s px-8 py-4">All Boards ({data.length})</p>
@@ -50,7 +48,7 @@ const SideMenu = ({ selectedBoardIndex, setSelectedBoardIndex }) => {
               </button>
             }
           >
-            <NewBoardForm />
+            <NewBoardForm toggleDialogue={setOpen} />
           </DialogPrimitive>
         </li>
       </ul>

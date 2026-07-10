@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Button from "./Button";
 import TextField from "./TextField";
 import iconCross from "@assets/icon-cross.svg";
+import { DataContext } from "@/DataContext";
 
-const NewBoardForm = () => {
+const NewBoardForm = ({ boardId, toggleDialogue }) => {
+  const { setData, setSelectedBoardIndex } = useContext(DataContext);
   const [columnsArray, setColumnsArray] = useState(() => [{ id: Date.now() }]);
 
   const removeColumnHandler = (index) => {
@@ -14,8 +16,45 @@ const NewBoardForm = () => {
     setColumnsArray((prev) => [...prev, { id: Date.now() }]);
   };
 
+  const createNewColumnsArray = (formData, columnsArray) => {
+    return columnsArray.map((column) => {
+      return {
+        id: column.id,
+        title: formData.get(column.id),
+        tasks: [],
+      };
+    });
+  };
+
+  const updateData = (boardName, newColumnsArray, setData) => {
+    setData((prev) => {
+      setSelectedBoardIndex(prev.length);
+      return [
+        ...prev,
+        {
+          id: Date.now(),
+          title: boardName,
+          columns: newColumnsArray,
+        },
+      ];
+    });
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const boardName = formData.get("boardName");
+    const newColumnsArray = createNewColumnsArray(
+      formData,
+      columnsArray,
+      boardId,
+    );
+    updateData(boardName, newColumnsArray, setData);
+    toggleDialogue(false);
+  };
+
   return (
-    <form>
+    <form onSubmit={handleFormSubmit}>
       <div>
         <h3 className="text-body-m text-medium-grey pt-6 pb-2">Name</h3>
         <TextField placeholder="e.g. Web Design" name="boardName" required />
@@ -30,7 +69,7 @@ const NewBoardForm = () => {
               defaultValue={obj.title}
               required
             />
-            <button onClick={() => removeColumnHandler(index)}>
+            <button type="button" onClick={() => removeColumnHandler(index)}>
               <img src={iconCross} alt="icon cross" />
             </button>
           </div>
