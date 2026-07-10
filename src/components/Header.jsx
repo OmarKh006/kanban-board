@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import DropdownPrimitive from "./DropdownPrimitive";
 import iconVerticalEllipsis from "@assets/icon-vertical-ellipsis.svg";
 import DialogPrimitive from "./DialogPrimitive";
+import { DataContext } from "@/DataContext";
 
 /**
  * @returns {JSX.Element} A React component that renders the header of the application, including the title and a dropdown menu for editing or deleting the current board.
@@ -9,12 +10,13 @@ import DialogPrimitive from "./DialogPrimitive";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
+  const { setData, selectedBoardIndex } = useContext(DataContext);
 
   const onEditBoard = () => setOpen(true);
 
   const onDeleteBoard = () => {
     if (window.confirm("Are you sure you want to delete this board ??")) {
-      console.log("delete");
+      setData((prev) => prev.toSpliced(selectedBoardIndex, 1));
     }
   };
 
