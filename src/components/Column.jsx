@@ -47,7 +47,12 @@ const Column = ({ id, tasks = [], title }) => {
       </h2>
       <div className="mb-5 flex flex-col gap-5">
         {tasks.map((task) => (
-          <Card key={task.id} title={task.title} />
+          <Card
+            key={task.id}
+            title={task.title}
+            cardId={task.id}
+            columnId={id}
+          />
         ))}
       </div>
       <button
