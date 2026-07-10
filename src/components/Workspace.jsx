@@ -3,8 +3,27 @@ import Column from "./Column";
 import { DataContext } from "@/DataContext";
 
 const Workspace = () => {
-  const { data, selectedBoardIndex } = useContext(DataContext);
+  const { data, selectedBoardIndex, setData } = useContext(DataContext);
   const columns = data[selectedBoardIndex]?.columns;
+
+  const addNewColumnHandler = () => {
+    setData((prev) => {
+      const newData = [...prev];
+      newData[selectedBoardIndex] = {
+        ...newData[selectedBoardIndex],
+        columns: [
+          ...newData[selectedBoardIndex].columns,
+          {
+            id: Date.now(),
+            title: "New Column",
+            tasks: [],
+          },
+        ],
+      };
+      return newData;
+    });
+  };
+
   return (
     <div className="bg-light-grey flex h-[calc(100vh-97px)] flex-1 gap-6 overflow-auto p-6">
       {columns?.length &&
@@ -16,7 +35,10 @@ const Workspace = () => {
             title={column.title}
           />
         ))}
-      <button className="bg-lines-light text-heading-l text-medium-grey w-72 shrink-0 self-start rounded-md p-3">
+      <button
+        className="bg-lines-light text-heading-l text-medium-grey w-72 shrink-0 self-start rounded-md p-3"
+        onClick={addNewColumnHandler}
+      >
         + New Column
       </button>
     </div>
