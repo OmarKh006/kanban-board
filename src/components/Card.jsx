@@ -1,10 +1,18 @@
 import { DataContext } from "@/DataContext";
 import { produce } from "immer";
 import { useContext, useState } from "react";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
-const Card = ({ title, columnId, cardId, columnIndex, cardIndex }) => {
+const Card = ({ title, columnId, cardId }) => {
   const { selectedBoardIndex, setData } = useContext(DataContext);
   const [isEditMode, setIsEditMode] = useState(false);
+
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: cardId,
+      data: { columnId },
+    });
 
   const onDeleteHandler = () => {
     if (window.confirm("Are you sure you want to delete this task ??")) {
@@ -26,11 +34,17 @@ const Card = ({ title, columnId, cardId, columnIndex, cardIndex }) => {
 
   const onBlurHandler = (e) => {
     setIsEditMode(false);
-    if (e.target.value.trim() === title) return;
+    const newTitle = e.target.value.trim();
+    if (newTitle === title || newTitle === "") return;
     setData((prev) =>
       produce(prev, (draft) => {
-        draft[selectedBoardIndex].columns[columnIndex].tasks[cardIndex].title =
-          e.target.value.trim();
+        const column = draft[selectedBoardIndex].columns.find(
+          (col) => col.id === columnId,
+        );
+        if (!column) return;
+        const task = column.tasks.find((t) => t.id === cardId);
+        if (!task) return;
+        task.title = newTitle;
       }),
     );
   };
@@ -39,8 +53,19 @@ const Card = ({ title, columnId, cardId, columnIndex, cardIndex }) => {
     e.key === "Enter" && e.target.blur();
   };
 
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
   return (
-    <div className="group/card relative min-h-16 overflow-y-hidden rounded-lg bg-white px-4 py-3 shadow-sm">
+    <div
+      className="group/card relative min-h-16 overflow-y-hidden rounded-lg bg-white px-4 py-3 shadow-sm"
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+    >
       {!isEditMode ? (
         <button
           className="peer text-heading-m h-full text-start"
